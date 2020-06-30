@@ -14,6 +14,7 @@
 <body>
 	<marquee>ini admin</marquee>
 	<h1>HAiii <?php echo $_SESSION['nama'] ?></h1>
+	<a href="../User_Management/index.php">User Management</a><br>
 	<a href="../Auth/logout.php">LOGOUT</a>
 </body>
 </html>
