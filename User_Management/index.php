@@ -57,7 +57,7 @@
     function belumBisa() {
         Swal.fire(
           'Warning!',
-          'belum bisa',
+          'belum bisa ka nunggu frontend',
           'warning'
         )
     }
