@@ -29,20 +29,19 @@
         while($row = mysqli_fetch_array($user))
         {
 
-<<<<<<< HEAD
-            echo "<tr>
-=======
+            echo "<tr>"
+
             echo "<tr class='itemUser".$row['id_user']."'>
->>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
+
             <td>".$i."</td>
             <td>".$row['nama']."</td>
             <td>".$row['username']."</td>
             <td>".$row['role']."</td>
-<<<<<<< HEAD
+
             <td><button type='button' class='btn btn-primary' onclick='belumBisa()'><i class='material-icons'>edit</i></button><button type='button' class='btn btn-danger' onclick='belumBisa()'><i class='material-icons'>delete</i></button></td>
-=======
+
             <td><button type='button' class='btn btn-primary' onclick='belumBisa()'><i class='material-icons'>edit</i></button><button type='button' class='btn btn-danger btn_delete' data-id=".$row['id_user']."><i class='material-icons'>delete</i></button></td>
->>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
+
         </tr>";
         $i++;
         }
@@ -65,16 +64,12 @@
     function belumBisa() {
         Swal.fire(
           'Warning!',
-<<<<<<< HEAD
+
           'belum bisa',
           'warning'
-        )
+        );
     }
-=======
-          'belum bisa ka nunggu frontend',
-          'warning'
-        )
-    }
+
     $('.btn_delete').on('click', function () {
             
              id=$(this).data('id');
@@ -140,6 +135,6 @@
     
         
     }
->>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
+
 </script>
 </html>
