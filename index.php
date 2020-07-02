@@ -44,11 +44,11 @@
                 </div>
                 <div class="form-check form-check-inline"style="margin-left: 80px!important;">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label" for="inlineRadio1">Admin</label>
+                    <!-- <label class="form-check-label" for="inlineRadio1">Admin</label> -->
                   </div>
                   <div class="form-check form-check-inline"style="margin-left: 80px!important;margin-bottom:20px;">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">Kasir</label>
+                    <label class="form-check-label" for="inlineRadio2" id="inlineRadio2l">Kasir</label>
                   </div>
             		<input type="submit" class="btn btn-primary" value="LOGIN">
               </form>
@@ -60,5 +60,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="../Asset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $('#inlineRadio1').hide();
+      $('#inlineRadio2').hide();
+      $('#inlineRadio2l').hide();
+    </script>
  </body>
  </html>

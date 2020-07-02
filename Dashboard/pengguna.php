@@ -90,21 +90,27 @@
                                     </div>
                                     <div class="modal-body">
                                       <div class="form-group">
-                                          <label for="exampleInputEmail1">Nama </label>
-                                          <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                          <label for="nama">Nama </label>
+                                          <input type="name" class="form-control" id="nama" aria-describedby="emailHelp">
                                         </div>
                                         <div class="form-group">
-                                          <label for="exampleInputPassword1">Username</label>
-                                          <input type="text" class="form-control" id="exampleInputPassword1">
+                                          <label for="username">Username</label>
+                                          <input type="text" class="form-control" id="username">
                                         </div>
                                         <div class="form-group">
-                                          <label for="exampleInputPassword1">Roles</label>
-                                          <input type="text" class="form-control" id="exampleInputPassword1">
+                                          <label for="password">Password </label>
+                                          <input type="password" class="form-control" id="password" aria-describedby="emailHelp">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword1">Konfirmasi Password</label>
+                                          <input type="password" class="form-control" id="kpassword">
+                                          <small class="msg_error" style="color: red">Sorry Password Didn't Match Please check Again</small>
+                                          <small class="msg_done" style="color: green">Password Match!! Thanks :)</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <button type="button" class="btn btn-primary">Save changes</button>
+                                      <button type="button" class="btn btn-primary btn_simpan">Save changes</button>
                                     </div>
                                   </div>
                                 </div>
@@ -217,7 +223,10 @@
 
     <script>
     $(document).ready(function(){
+        var nama,username,password;
         var codeListTable=$('#tabel-data').DataTable();
+        $('.msg_done').hide();
+        $('.msg_error').hide();
         new $.fn.dataTable.Buttons( codeListTable, {
             buttons: [
                 
@@ -273,14 +282,81 @@
         } );
         codeListTable.buttons().container().appendTo('.list-button');
     });
-    function belumBisa() {
-        Swal.fire(
-          'Warning!',
 
-          'belum bisa',
-          'warning'
-        );
-    }
+    $('#kpassword').on('keyup', function () {
+      if ($(this).val() != $('#password').val()) {
+        $('.msg_done').hide();
+        $('.msg_error').show();
+        $('.btn_simpan').prop('disabled', true);
+      }else{
+        $('.msg_done').show();
+        $('.msg_error').hide();
+        $('.btn_simpan').prop('disabled', false);
+      }
+
+    });
+   
+
+     $('.btn_simpan').on('click', function () {
+        var id_user;
+        nama = $('#nama').val();
+        username = $('#username').val();
+        password = $('#password').val();
+        console.log(nama + username + password);
+        if (nama == '' || username == '' || password == '') {
+          Swal.fire(
+            'Warning!',
+
+            'Pastikan Semua Data sudah terisi',
+            'warning'
+          );
+        }else{
+          $.ajax({
+                    url:"../Controller/user_manage.php",
+                    type:'post',
+                    data:{id:'0',tipe:'get_id'},
+                    success: function (data) {
+                       console.log(data);
+                       id_user = data;
+                       $.ajax({
+                          url:"../Controller/user_manage.php",
+                          type:'post',
+                          data:{id:id_user,tipe:'add_user',nama:nama,username:username,password:password},
+                          success: function (data) {
+                            Swal.fire({
+                                
+                                icon: 'success',
+                                title: 'Your work has been saved',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                             setTimeout(function(){
+                                 window.location.reload(1);
+                              }, 1600);
+                             
+                              },
+                              error: function (data) {
+                                   swalWithBootstrapButtons.fire(
+                                    'Gagal!',
+                                    'Failed to add data',
+                                    'error'
+                                  );
+                              }
+                      });
+
+              
+                        },
+                        error: function (data) {
+                             swalWithBootstrapButtons.fire(
+                              'Gagal!',
+                              'Failed to get code',
+                              'error'
+                            );
+                        }
+                });
+
+        }
+     });
 
     $('.btn_delete').on('click', function () {
             
