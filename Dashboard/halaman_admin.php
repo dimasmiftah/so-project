@@ -7,6 +7,7 @@
 	}
 
 	?>
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
   <head>
@@ -167,3 +168,16 @@
     <script src="../Asset/js/bootstrap.min.js"></script>
   </body>
 </html>
+=======
+<html>
+<head>
+	<title>ini admin</title>
+</head>
+<body>
+	<marquee>ini admin</marquee>
+	<h1>HAiii <?php echo $_SESSION['nama'] ?></h1>
+	<a href="../User_Management/index.php">User Management</a><br>
+	<a href="../Auth/logout.php">LOGOUT</a>
+</body>
+</html>
+>>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425

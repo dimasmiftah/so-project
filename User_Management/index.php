@@ -29,12 +29,20 @@
         while($row = mysqli_fetch_array($user))
         {
 
+<<<<<<< HEAD
             echo "<tr>
+=======
+            echo "<tr class='itemUser".$row['id_user']."'>
+>>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
             <td>".$i."</td>
             <td>".$row['nama']."</td>
             <td>".$row['username']."</td>
             <td>".$row['role']."</td>
+<<<<<<< HEAD
             <td><button type='button' class='btn btn-primary' onclick='belumBisa()'><i class='material-icons'>edit</i></button><button type='button' class='btn btn-danger' onclick='belumBisa()'><i class='material-icons'>delete</i></button></td>
+=======
+            <td><button type='button' class='btn btn-primary' onclick='belumBisa()'><i class='material-icons'>edit</i></button><button type='button' class='btn btn-danger btn_delete' data-id=".$row['id_user']."><i class='material-icons'>delete</i></button></td>
+>>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
         </tr>";
         $i++;
         }
@@ -57,9 +65,81 @@
     function belumBisa() {
         Swal.fire(
           'Warning!',
+<<<<<<< HEAD
           'belum bisa',
           'warning'
         )
     }
+=======
+          'belum bisa ka nunggu frontend',
+          'warning'
+        )
+    }
+    $('.btn_delete').on('click', function () {
+            
+             id=$(this).data('id');
+             console.log(id);
+              Delete_User(id);
+            
+         });
+
+    function Delete_User(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.value) {
+            $.ajax({
+                    url:"../Controller/user_manage.php",
+                    type:'post',
+                    data:{id:id,tipe:'delete'},
+                    success: function (data) {
+                       swalWithBootstrapButtons.fire(
+                          'Deleted!',
+                          'Your file has been deleted.',
+                          'success'
+                        );
+                       $('.itemUser'+id).fadeOut(1500, function(){ $(this).remove();});
+
+                        },
+                        error: function (data) {
+                             swalWithBootstrapButtons.fire(
+                              'Gagal!',
+                              'Failed to delete your file.',
+                              'error'
+                            );
+                        }
+                });
+            
+          } else if (
+            
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Cancelled',
+              'Your imaginary file is safe :)',
+              'error'
+            )
+          }
+        });
+
+
+    
+        
+    }
+>>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425
 </script>
 </html>
