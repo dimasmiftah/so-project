@@ -28,7 +28,7 @@
       }
     </style>
 
-    <title>Aplikasi Sembako</title>
+    <title>Management User - Aplikasi Sembako</title>
   </head>
   <body style="background:#f9f9f9;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -130,7 +130,7 @@
                             <tbody>
                               <?php
                                   include '../Auth/koneksi.php';
-                                  $user = mysqli_query($koneksi,"select * from user");
+                                  $user = mysqli_query($koneksi,"select * from user where role != 'admin'");
                                   $i=1;
                                   while($row = mysqli_fetch_array($user))
                                   {
@@ -145,7 +145,7 @@
                                       <td>".$row['role']."</td>
                                       <td>
                                         <center>
-                                           <button class='btn btn-primary'data-toggle='modal' data-target='#edit'aria-hidden='true' type='button'><i class='fas fa-pen'></i> </button>
+                                           <button class='btn btn-primary btn_edit'data-toggle='modal' data-id=".$row['id_user']." data-target='#edit'aria-hidden='true' type='button'><i class='fas fa-pen'></i> </button>
                                            <button class='btn btn-primary btn_delete' style='background:red;border:none;' data-id=".$row['id_user']."> <i class='fas fa-trash'></i> </button>
                                           
                                         </center>
@@ -166,28 +166,25 @@
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">Edit Data Barang</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel">Edit Data Pengguna</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
                                 <div class="modal-body">
                                   <div class="form-group">
-                                      <label for="exampleInputEmail1">Nama</label>
-                                      <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                      <label for="edit_nama">Nama</label>
+                                      <input type="name" class="form-control" id="edit_nama" aria-describedby="emailHelp">
                                     </div>
                                     <div class="form-group">
-                                      <label for="exampleInputPassword1">Username</label>
-                                      <input type="text" class="form-control" id="exampleInputPassword1">
+                                      <label for="edit_username">Username</label>
+                                      <input type="text" class="form-control" id="edit_username">
                                     </div>
-                                    <div class="form-group">
-                                      <label for="exampleInputPassword1">Roles</label>
-                                      <input type="text" class="form-control" id="exampleInputPassword1">
-                                    </div>
+                                    
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                  <button type="button" class="btn btn-primary btn_update">Save changes</button>
                                 </div>
                               </div>
                             </div>
@@ -365,6 +362,63 @@
               Delete_User(id);
             
          });
+    $('.btn_edit').on('click', function () {
+            
+             id=$(this).data('id');
+             console.log(id);
+             edit_User(id);
+            
+         });
+    $('.btn_update').on('click', function () {
+            $.ajax({
+                    url:"../Controller/user_manage.php",
+                    type:'post',
+                    data:{id:id,tipe:'update',nama:$('#edit_nama').val(),username:$('#edit_username').val()},
+                    success: function (data) {
+                       Swal.fire({
+                                icon: 'success',
+                                title: 'Update Success !',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                             setTimeout(function(){
+                                 window.location.reload(1);
+                              }, 1600);
+                       
+
+                        },
+                        error: function (data) {
+                             swalWithBootstrapButtons.fire(
+                              'Gagal!',
+                              'Failed to delete your file.',
+                              'error'
+                            );
+                        }
+                });
+            
+            
+         });
+    function edit_User(id){
+            $.ajax({
+                    url:"../Controller/user_manage.php",
+                    type:'post',
+                    data:{id:id,tipe:'edit'},
+                    success: function (data) {
+                       console.log(data);
+                       var edit = $.parseJSON(data);
+                       $('#edit_nama').val(edit[0]['nama']);
+                       $('#edit_username').val(edit[0]['username']);
+
+                        },
+                        error: function (data) {
+                             swalWithBootstrapButtons.fire(
+                              'Gagal!',
+                              'Failed to delete your file.',
+                              'error'
+                            );
+                        }
+                });
+    }
 
     function Delete_User(id) {
         const swalWithBootstrapButtons = Swal.mixin({
