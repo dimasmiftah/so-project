@@ -4,7 +4,7 @@ include '../Auth/koneksi.php';
 $type = $_POST['tipe'];
 $id = $_POST['id'];
 if ($type == 'delete') {
-	mysqli_query($koneksi,"delete from user where id_user='$id'");
+	mysqli_query($koneksi,"delete from transaksi where id_transaksi='$id'");
 } else if($type == 'edit'){
 	$query = mysqli_query($koneksi,"select * from user where id_user='$id'");
 	while($row = $query->fetch_assoc()) {

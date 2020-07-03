@@ -7,7 +7,6 @@
 	}
 
 	?>
-<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
   <head>
@@ -123,7 +122,7 @@
                             <th scope="col">Harga</th>
                             <th scope="col">Opsi</th>
                           </tr>
-                         </thead>
+                        </thead>
                           <tbody>
                               <tr>
                                 <th scope="row">1</th>
@@ -156,7 +155,7 @@
                       </table>
                     </div>
                   </section>
-               </div>
+                </div>
                 <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
               </div>
@@ -168,16 +167,3 @@
     <script src="../Asset/js/bootstrap.min.js"></script>
   </body>
 </html>
-=======
-<html>
-<head>
-	<title>ini admin</title>
-</head>
-<body>
-	<marquee>ini admin</marquee>
-	<h1>HAiii <?php echo $_SESSION['nama'] ?></h1>
-	<a href="../User_Management/index.php">User Management</a><br>
-	<a href="../Auth/logout.php">LOGOUT</a>
-</body>
-</html>
->>>>>>> af256953d0d30dfe88215dc170fb5a9d66f83425

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../Asset/css/base.css">
     <link rel="stylesheet" href="../Asset/css/mobile.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css"/>
-      <link rel="stylesheet" type="text/css" href="../Asset/SweetAlert/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="../Asset/SweetAlert/sweetalert2.min.css">
     <link rel="stylesheet" href="../Asset/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <style type="text/css">
