@@ -1,3 +1,11 @@
+<?php
+	session_start();
+
+	// cek apakah yang mengakses halaman ini sudah login
+	if($_SESSION['role']==""){
+		header("location:../index.php?pesan=gagal");
+	}
+	?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,16 +17,16 @@
   <link rel="stylesheet" type="text/css" href="../Asset/SweetAlert/sweetalert2.min.css">
   <link rel="stylesheet" href="../Asset/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
   <title> So-Ping</title>
   <style>
-    table.tabel-transaksi tr:hover td {
-      background: #F9F9F9;
-    }
   </style>
 </head>
 <body style="background:#f9f9f9;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">So-ping!</a>
+    <a class="navbar-brand" href="#">So-ping!</a> 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -56,7 +64,7 @@
                     <div class="row">
                       <div class="col-4">
                         <h3 class="title-table"> Daftar Transaksi </h3>
-                        <p class="note-transaksi"> *Note : Klik pada baris untuk melihat detail Transaksi</p>
+                        <!-- <p class="note-transaksi"> *Note : Klik pada baris untuk melihat detail Transaksi</p> -->
                       </div>
                       <div class="col-5">
                         <form class="form-inline my-2 my-lg-0">
@@ -77,22 +85,51 @@
                                 </div>
                                 <!-- TAMBAH -->
                                 <div class="modal-body">
-                                  <div class="form-group">
-                                      <label for="exampleInputEmail1">Nama</label>
-                                      <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="exampleInputPassword1">Username</label>
-                                      <input type="number" class="form-control" id="exampleInputPassword1">
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="exampleInputPassword1">Role</label>
-                                      <input type="number" class="form-control" id="exampleInputPassword1">
-                                    </div>
+                                  <input id="kasir" type="hidden" value='<?=$_SESSION['username']?>'>
+                                  <table class="table">
+                                    <tr>
+                                      <td>
+                                        <select id="barangs" name="barangs">
+                                          <option ></option>
+                                          <?php
+                                            include '../Auth/koneksi.php';
+                                            $barang = mysqli_query($koneksi,"select * from barang where stok>=1");
+                                            $i = 1;
+                                            while($row = mysqli_fetch_array($barang))
+                                            {
+                                              echo "<option class='barang'".$i." value=".$row['id_barang'].">".$row['barang']."</option>";
+                                              $i++;
+                                            }
+                                          ?>
+                                        </select>
+                                      </td>
+                                      <td><input type="text" placeholder="Jumlah" id="txt_jumlah"></td>
+                                      <td>
+                                        <button class="btn btn-primary" id="btn_tambah">Tambah</button>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                  
+                                  <table class="table">
+                                    <thead class=""style="background:#007BFF;color:#fff;">
+                                      <tr>
+                                        <th scope="col">Nama Barang</th>
+                                        <th scope="col">Harga</th>
+                                        <th scope="col">Jumlah</th>
+                                        <th scope="col">Total Harga</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="list_barang">
+                                    </tbody>
+                                    <tfoot>
+                                      <tr><td></td><td></td><td>Total</td><td id="total"></td></tr>
+                                    </tfoot>
+                                  </table>
+                                  
                                 </div>
                                 <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                  <button type="button" class="btn btn-primary" id="btn_simpan">Simpan</button>
                                 </div>
                               </div>
                             </div>
@@ -107,14 +144,13 @@
                           <th scope="col">Kasir</th>
                           <th scope="col">Tanggal</th>
                           <th scope="col">Total Harga</th>
-                          <th scope="col"><center>opsi</center></th>
+                          <th scope="col"><center>Aksi</center></th>
                         </tr>
                       </thead>
                         <tbody>
                           <?php
                             include '../Auth/koneksi.php';
                             $transaksi = mysqli_query($koneksi,"select * from transaksi");
-                            // $i=1;
                             while($row = mysqli_fetch_array($transaksi))
                             {
                               $nama_kasir = '';
@@ -123,66 +159,21 @@
                                 $nama_kasir = $row2['nama'];
                               }
                               echo "<tr class='itemTransaksi".$row['id_transaksi']."'>
-                                <td data-toggle='modal' data-target='#list-transaksi'>".$row['id_transaksi']."</td>
-                                <td data-toggle='modal' data-target='#list-transaksi'>".$nama_kasir."</td>
-                                <td data-toggle='modal' data-target='#list-transaksi'>".$row['tanggal']."</td>
-                                <td data-toggle='modal' data-target='#list-transaksi'>".$row['subtotal']."</td>
+                                <td>".$row['id_transaksi']."</td>
+                                <td>".$nama_kasir."</td>
+                                <td>".$row['tanggal']."</td>
+                                <td>".$row['subtotal']."</td>
                                 <td>
                                   <center>
-                                    <button class='btn btn-primary btn_edit'data-toggle='modal' data-id=".$row['id_transaksi']." data-target='#edit'aria-hidden='true' type='button'><i class='fas fa-pen'></i> </button>
+                                    <button class='btn btn-primary btn_detail' data-id=".$row['id_transaksi']."> <i class='fas fa-eye'></i> </button>
                                     <button class='btn btn-primary btn_delete' style='background:red;border:none;' data-id=".$row['id_transaksi']."> <i class='fas fa-trash'></i> </button>
                                   </center>
                                 </td>
                               </tr>";
-                            // $i++;
                             }
                           ?>
-                            <!-- <tr>
-                              <th scope="row"><button data-toggle="modal" data-target="#list-transaksi" type="button" class="link-list-Transaksi">1</button></th>
-                              <td>Kue</td>
-                              <td>2</td>
-                              <td>10.000</td>
-                              <td>
-                                <center>
-                                  <button class="btn btn-primary"data-toggle="modal" data-target="#edit"aria-hidden="true" type="button"><i class="fas fa-pen"></i> </button>
-                                  <button class="btn btn-primary"style="background:red;border:none;"> <i class="fas fa-trash"></i> </button>
-                                  </a>
-                                </center>
-                              </td>
-                            </tr> -->
                         </tbody>
                     </table>
-                    <div id="edit" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Edit Data Pengguna</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <!-- EDIT -->
-                            <div class="modal-body">
-                              <div class="form-group">
-                                  <label for="exampleInputEmail1">Nama</label>
-                                  <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword1">Username</label>
-                                  <input type="number" class="form-control" id="exampleInputPassword1">
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword1">Role</label>
-                                  <input type="number" class="form-control" id="exampleInputPassword1">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                       <div id="list-transaksi" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -197,25 +188,14 @@
                                 <table class="table">
                                   <thead class=""style="background:#007BFF;color:#fff;">
                                     <tr>
-                                      <th scope="col">Tanggal.</th>
+                                      <th scope="col">No</th>
                                       <th scope="col">Nama Barang</th>
+                                      <th scope="col">Harga</th>
                                       <th scope="col">Qty</th>
-                                      <th scope="col">Total</th>
+                                      <th scope="col">Total Harga</th>
                                     </tr>
                                   </thead>
-                                    <tbody>
-                                        <tr>
-                                          <td>30-07-2020</td>
-                                          <td>Kue</td>
-                                          <td>@2</td>
-                                          <td> 20.000</td>
-                                        </tr>
-                                        <tr>
-                                          <td>30-07-2020</td>
-                                          <td>Kue</td>
-                                          <td>@2</td>
-                                          <td> 20.000</td>
-                                        </tr>
+                                    <tbody id="list-barang">
                                     </tbody>
                                 </table>
                               </div>
@@ -231,7 +211,6 @@
         </div>
       </div>
   </header>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="../Asset/SweetAlert/sweetalert2.min.js"></script>
@@ -247,12 +226,161 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script>
+
+  const id_transaksi = Number(new Date().getTime());
+  const list = [];
+  let kasir = null;
+  let total = 0;
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+  })
+
+  // DROPDOWN BARANG
+  $(document).ready(function() {
+    $('#barangs').select2({
+      placeholder: 'Pilih Barang',
+      allowClear: true
+    });
+      kasir = $('#kasir').val();
+  });
+
+  // Simpan transaksi
+  $('#btn_simpan').on('click', () => {
+    $.ajax({
+      url:"../Controller/transaksi_manage.php",
+      type:'post',
+      data:{kasir,tipe:'kasir'},
+      success: (id_user) => {
+        $.ajax({
+          url:"../Controller/transaksi_manage.php",
+          type:'post',
+          data:{id_transaksi, id_user, total, list, tipe:'create'},
+          success: function (data) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil menyimpan transaksi',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            console.log(data);
+            
+            setTimeout(function(){
+              window.location.reload(1);
+            }, 1600);
+          },
+          error: function (data) {
+            swalWithBootstrapButtons.fire(
+              'Gagal!',
+              'Gagal menyimpan transaksi',
+              'error'
+            );
+          }
+        });
+      }, error: (err) =>  {
+        alert(err);
+      }
+    });
+    
+  })
+
+  // reset tambah barang
+  function resetTambah(){
+    $('#barangs').val(null).trigger('change');
+    $('#txt_jumlah').val(null);
+  }
+
+  // TAMBAH BARANG EVENT
+  $('#btn_tambah').on('click', function () {
+    let id=$('#barangs').children("option:selected").val();
+    let jumlah=Number($('#txt_jumlah').val());
+    if(id == '') {
+      alert('pilih barang')
+    } else if(jumlah == '') {
+      alert('isi jumlah');
+    } else  {
+      $.ajax({
+        url:"../Controller/transaksi_manage.php",
+        type:'post',
+        data:{id:id,tipe:'pilih'},
+        success: (data) => {
+          let data_json = JSON.parse(data)
+          let barang = {
+            id_barang: Number(data_json[0].id_barang),
+            barang:data_json[0].barang,
+            stok:Number(data_json[0].stok),
+            harga:Number(data_json[0].harga)
+          }
+          console.log(barang);
+          if (jumlah > barang.stok) {
+            alert(barang.barang +' hanya tersisa '+ barang.stok)
+          } else {
+            total += (jumlah*barang.harga);
+            list.push({id_barang: barang.id_barang, barang:barang.barang, harga:barang.harga, qty:jumlah, total: jumlah*barang.harga})
+            $("#list_barang").append(
+              `
+              <tr>
+                <td>${barang.barang}</td>
+                <td>${barang.harga}</td>
+                <td>${jumlah}</td>
+                <td>${jumlah*barang.harga}</td>
+              </tr>
+              `
+            );
+            $('#total').html(total)
+            resetTambah()
+          }
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      })
+    }
+  });
+
   // DELETE CLICK EVENT
   $('.btn_delete').on('click', function () {
-    id=$(this).data('id');
-    console.log(id);
+    let id=$(this).data('id');
     Delete_Transaksi(id);
   });
+
+  // DETAIL CLICK EVENT
+  $('.btn_detail').on('click', function () {
+    let id_transaksi=$(this).data('id');
+    Detail_Transaksi(id_transaksi);
+  });
+
+  //DETAIL ACTION
+  function Detail_Transaksi(id_transaksi) {
+    $.ajax({
+      url:"../Controller/transaksi_manage.php",
+      type:'post',
+      data:{id_transaksi,tipe:'detail'},
+      success: function (data) {
+        const list_transaksi = [...JSON.parse(data)];
+        let htmlList = '';
+        list_transaksi.forEach((li, index) => {
+          htmlList +=
+            `
+            <tr>
+            <td>${index+1}</td>
+            <td>${li.barang}</td>
+            <td>${li.harga}</td>
+            <td>${li.qty}</td>
+            <td>${li.total}</td>
+            </tr>
+            `
+        })
+        $('#list-barang').html(htmlList)
+        $('#list-transaksi').modal('toggle');
+      }, error: function (err) {
+        console.log(err)
+      }
+    });
+  }
 
   //DELETE CLICK ACTION
   function Delete_Transaksi(id) {

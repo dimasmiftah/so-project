@@ -25,6 +25,7 @@ if($cek > 0){
 	if($data['role']=="admin"){
  
 		// buat session login dan username
+		$_SESSION['id_user'] = $data['id_user'];
 		$_SESSION['nama'] = $data['nama'];
 		$_SESSION['username'] = $username;
 		$_SESSION['role'] = "admin";
@@ -35,6 +36,7 @@ if($cek > 0){
 	}else if($data['role']=="kasir"){
 		// buat session login dan username
 		$_SESSION['username'] = $username;
+		$_SESSION['id_user'] = $data['id_user'];
 		$_SESSION['nama'] = $data['nama'];
 		$_SESSION['role'] = "kasir";
 		// alihkan ke halaman dashboard kasir
