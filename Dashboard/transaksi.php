@@ -21,8 +21,24 @@
   <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
   <title> So-Ping</title>
-  <style>
-  </style>
+  <style type="text/css">
+      .float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:40px;
+        background-color:#007bff;
+        color:#FFF;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #999;
+      }
+
+      .my-float{
+        margin-top:22px;
+      }
+    </style>
 </head>
 <body style="background:#f9f9f9;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -64,16 +80,9 @@
                     <div class="row">
                       <div class="col-4">
                         <h3 class="title-table"> Daftar Transaksi </h3>
-                        <!-- <p class="note-transaksi"> *Note : Klik pada baris untuk melihat detail Transaksi</p> -->
-                      </div>
-                      <div class="col-5">
-                        <form class="form-inline my-2 my-lg-0">
-                          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
                       </div>
                       <div class="col-3">
-                        <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah data Transaksi</button>
+                        <!-- <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah data Transaksi</button> -->
                         <div id="Tambah" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -137,7 +146,7 @@
                       </div>
                     </div>
                     <!-- TAMPIL -->
-                    <table class="table tabel-transaksi">
+                    <table class="table tabel-transaksi" id="tabel-data">
                       <thead class=""style="background:#007BFF;color:#fff;">
                         <tr>
                           <th scope="col">ID Transaksi</th>
@@ -174,34 +183,37 @@
                           ?>
                         </tbody>
                     </table>
-                      <div id="list-transaksi" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">List Data Transaksi</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <!-- LIST -->
-                              <div class="modal-body">
-                                <table class="table">
-                                  <thead class=""style="background:#007BFF;color:#fff;">
-                                    <tr>
-                                      <th scope="col">No</th>
-                                      <th scope="col">Nama Barang</th>
-                                      <th scope="col">Harga</th>
-                                      <th scope="col">Qty</th>
-                                      <th scope="col">Total Harga</th>
-                                    </tr>
-                                  </thead>
-                                    <tbody id="list-barang">
-                                    </tbody>
-                                </table>
-                              </div>
+                    <a href="#" class="float" data-toggle="modal" data-target="#Tambah"aria-hidden="true">
+                      <i class="fa fa-plus my-float"></i>
+                    </a>
+                    <div id="list-transaksi" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">List Data Transaksi</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <!-- LIST -->
+                            <div class="modal-body">
+                              <table class="table">
+                                <thead class=""style="background:#007BFF;color:#fff;">
+                                  <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Harga</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Total Harga</th>
+                                  </tr>
+                                </thead>
+                                  <tbody id="list-barang">
+                                  </tbody>
+                              </table>
                             </div>
                           </div>
                         </div>
+                      </div>
                   </div>
                 </section>
                 </div>
@@ -226,7 +238,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script>
-
+  
   const id_transaksi = Number(new Date().getTime());
   const list = [];
   let kasir = null;
@@ -241,6 +253,7 @@
 
   // DROPDOWN BARANG
   $(document).ready(function() {
+    $('#tabel-data').DataTable();
     $('#barangs').select2({
       placeholder: 'Pilih Barang',
       allowClear: true

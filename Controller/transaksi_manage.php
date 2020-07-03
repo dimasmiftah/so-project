@@ -26,6 +26,7 @@ if ($type == 'delete') {
 	foreach ($list as &$barang) {
 		mysqli_query($koneksi,"insert into transaksi value('$id_transaksi','$id_user',NOW(),'$total')");
 		mysqli_query($koneksi,"insert into list_transaksi value('','$id_transaksi','".$barang['id_barang']."','".$barang['qty']."', '".$barang['total']."')");
+		mysqli_query($koneksi,"UPDATE barang SET stok=stok-".$barang['qty']." WHERE id_barang=".$barang['id_barang']."");
 	}
 	unset($value); 
 } else if ($type == 'kasir') {
