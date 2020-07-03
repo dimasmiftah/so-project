@@ -112,7 +112,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `nama`, `role`) VALUES
-('USER-000', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin ganteng', 'admin'),
+('USER-000', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin'),
 ('USER-001', 'user', 'ec0c80296ec22a06b4fcd8ae06112112', 'kasir', 'kasir');
 
 --
