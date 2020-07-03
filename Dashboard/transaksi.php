@@ -82,7 +82,6 @@
                         <h3 class="title-table"> Daftar Transaksi </h3>
                       </div>
                       <div class="col-3">
-                        <!-- <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah data Transaksi</button> -->
                         <div id="Tambah" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
