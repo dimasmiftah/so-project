@@ -2,7 +2,7 @@
 	session_start();
 
 	// cek apakah yang mengakses halaman ini sudah login
-	if($_SESSION['role']==""){
+	if($_SESSION['role']!="kasir"){
 		header("location:../index.php?pesan=gagal");
 	}
 

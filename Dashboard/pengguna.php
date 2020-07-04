@@ -1,3 +1,12 @@
+<?php
+  if($_SESSION['role']!="admin"){
+   
+      
+     header("location:../index.php?pesan=admin");
+   
+    
+    }
+?>
 <!doctype html>
 <html lang="en">
   <head>
