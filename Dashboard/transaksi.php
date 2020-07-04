@@ -81,7 +81,11 @@
                       <div class="col-4">
                         <h3 class="title-table"> Daftar Transaksi </h3>
                       </div>
-                      <div class="col-3">
+                      <div class="col-5">
+                        
+                      </div>
+                      <div class="col-3 list-button">
+                        <button class="btn btn-primary btn-sm" style=" float: right;" onclick="ToPDF()"><i class="fa fa-file-pdf"></i> PDF</button>
                         <div id="Tambah" class="modal fade"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -170,7 +174,7 @@
                                 <td>".$row['id_transaksi']."</td>
                                 <td>".$nama_kasir."</td>
                                 <td>".$row['tanggal']."</td>
-                                <td>".$row['subtotal']."</td>
+                                <td>".rupiah($row['subtotal'])."</td>
                                 <td>
                                   <center>
                                     <button class='btn btn-primary btn_detail' data-id=".$row['id_transaksi']."> <i class='fas fa-eye'></i> </button>
@@ -182,6 +186,55 @@
                           ?>
                         </tbody>
                     </table>
+                    <div class="cetak_pdf"> 
+                    <table class="table table-striped" id="table_pdf" hidden>
+                      
+                      <thead >
+                        <tr>
+                          <th >ID Transaksi</th>
+                          <th >Kasir</th>
+                          <th >Tanggal</th>
+                          <th >List Barang</th>
+                          <th >Total Harga</th>
+                         
+                        </tr>
+                      </thead>
+                        <tbody>
+                          <?php
+                            include '../Auth/koneksi.php';
+                            $transaksi = mysqli_query($koneksi,"select * from transaksi");
+                            function rupiah($angka){
+  
+                              $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+                              return $hasil_rupiah;
+                             
+                            }
+                            while($row = mysqli_fetch_array($transaksi))
+                            {
+                              $id_transaksi =$row['id_transaksi'];
+                              $nama_kasir = '';
+                              $kasir = mysqli_query($koneksi,"select nama from user where id_user = '".$row['id_user']."'");
+                              while($row2 = mysqli_fetch_array($kasir)) {
+                                $nama_kasir = $row2['nama'];
+                              }
+                              echo "<tr class='itemTransaksi".$row['id_transaksi']."'>
+                                <td>".$row['id_transaksi']."</td>
+                                <td>".$nama_kasir."</td>
+                                <td>".$row['tanggal']."</td>";
+                              echo "<td>";
+                                $list = mysqli_query($koneksi,"select barang.barang,list_transaksi.qty from list_transaksi join barang on list_transaksi.id_barang = barang.id_barang where list_transaksi.id_transaksi='$id_transaksi'");
+                                echo "<ul>";
+                                while($row3 = mysqli_fetch_array($list)){
+                                  echo "<li>".$row3['barang']." (".$row3['qty'].")</br> ";
+                                }
+                                echo "</ul>";
+                              echo"</td>" ;
+                              echo "<td>".rupiah($row['subtotal'])."</td></tr>";
+                            }
+                          ?>
+                        </tbody>
+                    </table>
+                    </div>
                     <a href="#" class="float" data-toggle="modal" data-target="#Tambah"aria-hidden="true">
                       <i class="fa fa-plus my-float"></i>
                     </a>
@@ -228,15 +281,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="../Asset/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap4.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script type="text/javascript" src="../Asset/js/jspdf.plugin.autotable.min.js"></script>
 <script>
+
   
   const id_transaksi = Number(new Date().getTime());
   const list = [];
@@ -442,6 +491,21 @@
         )
       }
     });
+  }
+
+  function ToPDF(){
+    var doc = new jsPDF('p', 'pt', 'a4'),margins = {
+  top: 40,
+  bottom: 60,
+  left: 40,
+  width: 522
+};
+    doc.setFontSize(26);
+    doc.text(40, 35, 'Laporan Transaksi So-Ping');
+
+    
+  doc.autoTable({ html: '#table_pdf',margin: {top: 60, right: 40, bottom: 40, left: 40} });
+  doc.save('Laporan_Transaksi_So-Ping.pdf');
   }
 </script>
 </body>
