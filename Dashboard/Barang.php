@@ -1,6 +1,6 @@
 <!doctype html>
 <?php
-  if($_SESSION['role']!="admin"){
+  if($_SESSION['role']!="kasir"){
    
       
      header("location:../index.php?pesan=admin");
