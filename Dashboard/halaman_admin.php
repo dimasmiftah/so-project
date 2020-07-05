@@ -1,7 +1,7 @@
 <?php
 	session_start();
 
-	if($_SESSION['role']!="admin"){
+	if($_SESSION['role']==""){
  
      header("location:../index.php?pesan=gagal");
    
@@ -46,9 +46,9 @@
                   <p> <?php echo $_SESSION['nama'] ?></p>
                 </div>
                 <a class="nav-link active sidebar" href="#" role="tab" aria-selected="true"> <i class="fas fa-th-large"></i> Dashboard</a>
-                <a class="nav-link sidebar" href="Barang.php" role="tab" aria-controls="v-pills-profile" aria-selected="false"> <i class="fas fa-box-open"></i> Barang</a>
+                <a class="nav-link sidebar" href="Barang.php" role="tab" aria-controls="v-pills-profile" aria-selected="false" id="link_barang"> <i class="fas fa-box-open"></i> Barang</a>
                 <a class="nav-link sidebar" href="transaksi.php"role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> Transaksi</a>
-                <a class="nav-link sidebar"href="pengguna.php"role="tab" aria-selected="false"><i class="fas fa-users"></i> Pengguna</a>
+                <a class="nav-link sidebar"href="pengguna.php"role="tab" aria-selected="false" id="link_user"><i class="fas fa-users"></i> Pengguna</a>
               </div>
             </div>
             <div class="col-9">
@@ -164,8 +164,21 @@
             </div>
           </div>
       </header>
+
+      
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="../Asset/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var role;
+        $(document).ready(function(){
+            role= "<?php echo $_SESSION['role']?>";
+            console.log(role);
+            if (role == 'kasir') {
+              $('#link_user').hide();
+              $('#link_barang').hide();
+            }
+        });
+      </script>
   </body>
 </html>

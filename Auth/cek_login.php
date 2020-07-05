@@ -40,7 +40,7 @@ if($cek > 0){
 		$_SESSION['nama'] = $data['nama'];
 		$_SESSION['role'] = "kasir";
 		// alihkan ke halaman dashboard kasir
-		header("location:../Dashboard/halaman_kasir.php");
+		header("location:../Dashboard/halaman_admin.php");
  
 	}else{
  

@@ -2,7 +2,7 @@
 	session_start();
 
 	// cek apakah yang mengakses halaman ini sudah login
-	if($_SESSION['role']!="admin"){
+	if($_SESSION['role']==""){
 		header("location:../index.php?pesan=admin");
 	}
 	?>
@@ -66,9 +66,9 @@
             <p> Nama Pengguna</p>
           </div>
           <a class="nav-link  sidebar" href="halaman_admin.php" role="tab" aria-selected="true"> <i class="fas fa-th-large"></i> Dashboard</a>
-          <a class="nav-link sidebar"  href="Barang.php" role="tab" aria-selected="false"> <i class="fas fa-box-open"></i> Barang</a>
+          <a class="nav-link sidebar"  href="Barang.php" role="tab" aria-selected="false" id="link_barang"> <i class="fas fa-box-open"></i> Barang</a>
           <a class="nav-link active sidebar" href="transaksi.php"role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> Transaksi</a>
-          <a class="nav-link sidebar" href="pengguna.php"role="tab" aria-selected="false"><i class="fas fa-users"></i> Pengguna</a>
+          <a class="nav-link sidebar" href="pengguna.php"role="tab" aria-selected="false" id="link_user"><i class="fas fa-users"></i> Pengguna</a>
         </div>
       </div>
         <div class="col-9">
@@ -300,6 +300,7 @@
   })
 
   // DROPDOWN BARANG
+
   $(document).ready(function() {
     $('#tabel-data').DataTable();
     $('#barangs').select2({
@@ -307,6 +308,13 @@
       allowClear: true
     });
       kasir = $('#kasir').val();
+
+      var role= "<?php echo $_SESSION['role']?>";
+            console.log(role);
+            if (role == 'kasir') {
+              $('#link_user').hide();
+              $('#link_barang').hide();
+            }
   });
 
   // Simpan transaksi
