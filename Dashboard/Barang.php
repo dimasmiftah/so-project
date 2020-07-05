@@ -1,9 +1,10 @@
 <!doctype html>
 <?php
-  if($_SESSION['role']!="kasir"){
+session_start();
+  if($_SESSION['role']!="admin"){
    
-      
-     header("location:../index.php?pesan=admin");
+      //var_dump($_SESSION['role']);
+      header("location:../index.php?pesan=admin");
    
     
     }
