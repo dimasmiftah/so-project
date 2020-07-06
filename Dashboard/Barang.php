@@ -16,26 +16,7 @@
   <link rel="stylesheet" type="text/css" href="../Asset/SweetAlert/sweetalert2.min.css">
   <link rel="stylesheet" href="../Asset/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-  <title>Aplikasi Sembako</title>
-  <style type="text/css">
-    .float {
-      position: fixed;
-      width: 60px;
-      height: 60px;
-      bottom: 40px;
-      right: 40px;
-      background-color: #007bff;
-      color: #FFF;
-      border-radius: 50px;
-      text-align: center;
-      box-shadow: 2px 2px 3px #999;
-    }
-
-    .my-float {
-      margin-top: 22px;
-    }
-  </style>
+  <title>So-ping!</title>
 </head>
 
 <body style="background:#f9f9f9;">
@@ -48,7 +29,7 @@
       <ul class="navbar-nav mr-auto">
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <div> Hi! Admin </div>
+        <div> Hi! <?php echo $_SESSION['role'] ?> </div>
         <div class="logout"><a href="../Auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
       </form>
     </div>
@@ -61,10 +42,10 @@
             <div class="image-user">
               <i class="fas fa-user"></i>
             </div>
-            <p> Nama Pengguna</p>
+            <p> <?php echo $_SESSION['nama'] ?></p>
           </div>
-          <a class="nav-link  sidebar" href="halaman_admin.php" role="tab" aria-selected="true"> <i class="fas fa-th-large"></i> Dashboard</a>
-          <a class="nav-link active sidebar" href="Barang.php" role="tab" aria-selected="false"> <i class="fas fa-box-open"></i> Barang</a>
+          <a class="nav-link  sidebar" href="dashboard.php" role="tab" aria-selected="true"> <i class="fas fa-th-large"></i> Dashboard</a>
+          <a class="nav-link active sidebar" href="barang.php" role="tab" aria-selected="false"> <i class="fas fa-box-open"></i> Barang</a>
           <a class="nav-link sidebar" href="pengguna.php" role="tab" aria-selected="false"><i class="fas fa-users"></i> Pengguna</a>
           <a class="nav-link sidebar" href="transaksi.php" role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> Transaksi</a>
         </div>
@@ -78,6 +59,10 @@
                   <div class="row">
                     <div class="col-4">
                       <h3 class="title-table"> Daftar Barang </h3>
+                    </div>
+                    <div class="col-6"></div>
+                    <div class="col-2">
+                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah Data Barang</button>
                     </div>
                     <div class="col-3">
                       <div id="Tambah" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -154,9 +139,6 @@
                       ?>
                     </tbody>
                   </table>
-                  <a href="#" class="float" data-toggle="modal" data-target="#Tambah" aria-hidden="true">
-                    <i class="fa fa-plus my-float"></i>
-                  </a>
                   <div id="edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -214,7 +196,7 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
   <script>
     $(document).ready(() => {
-      $('#tabel-data').DataTable();
+      $('#tabel-data').DataTable({"pageLength": 5})
     });
 
     function Delete_User(id) {

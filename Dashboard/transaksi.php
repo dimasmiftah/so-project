@@ -1,10 +1,15 @@
 <?php
 session_start();
+  // cek apakah yang mengakses halaman ini sudah login
+  if ($_SESSION['role'] == "") {
+    header("location:../index.php?pesan=admin");
+  }
 
-// cek apakah yang mengakses halaman ini sudah login
-if ($_SESSION['role'] == "") {
-  header("location:../index.php?pesan=admin");
-}
+  // fungsi formatting rupiah
+  function rupiah($angka){
+    $hasil_rupiah = "Rp" . number_format($angka, 0, ',', '.');
+    return $hasil_rupiah;
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -21,25 +26,6 @@ if ($_SESSION['role'] == "") {
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-  <title> So-Ping</title>
-  <style type="text/css">
-    .float {
-      position: fixed;
-      width: 60px;
-      height: 60px;
-      bottom: 40px;
-      right: 40px;
-      background-color: #007bff;
-      color: #FFF;
-      border-radius: 50px;
-      text-align: center;
-      box-shadow: 2px 2px 3px #999;
-    }
-
-    .my-float {
-      margin-top: 22px;
-    }
-  </style>
 </head>
 
 <body style="background:#f9f9f9;">
@@ -52,7 +38,7 @@ if ($_SESSION['role'] == "") {
       <ul class="navbar-nav mr-auto">
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <div> Hi! Admin </div>
+        <div> Hi! <?php echo $_SESSION['role'] ?> </div>
         <div class="logout"><a href="../Auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
       </form>
     </div>
@@ -65,18 +51,17 @@ if ($_SESSION['role'] == "") {
             <div class="image-user">
               <i class="fas fa-user"></i>
             </div>
-            <p> Nama Pengguna</p>
+            <p> <?php echo $_SESSION['nama'] ?></p>
           </div>
-          <a class="nav-link  sidebar" href="halaman_admin.php" role="tab" aria-selected="true"> <i class="fas fa-th-large"></i> Dashboard</a>
           <?php
           if ($_SESSION['role'] == "admin") {
-            echo '<a class="nav-link sidebar"  href="Barang.php" role="tab" aria-selected="false" id="link_barang"> <i class="fas fa-box-open"></i> Barang</a>
-              <a class="nav-link sidebar" href="pengguna.php"role="tab" aria-selected="false" id="link_user"><i class="fas fa-users"></i> Pengguna</a>';
+            echo '
+            <a class="nav-link sidebar" href="dashboard.php" role="tab" aria-selected="true" id="link_dashboard"> <i class="fas fa-th-large"></i> Dashboard</a>
+            <a class="nav-link sidebar"  href="barang.php" role="tab" aria-selected="false" id="link_barang"> <i class="fas fa-box-open"></i> Barang</a>
+            <a class="nav-link sidebar" href="pengguna.php"role="tab" aria-selected="false" id="link_user"><i class="fas fa-users"></i> Pengguna</a>
+            <a class="nav-link active sidebar" href="transaksi.php" role="tab" aria-selected="false" id="link_transaksi"><i class="fas fa-shopping-cart"></i> Transaksi</a>';
           }
           ?>
-
-
-          <a class="nav-link active sidebar" href="transaksi.php" role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> Transaksi</a>
         </div>
       </div>
       <div class="col-9">
@@ -90,9 +75,11 @@ if ($_SESSION['role'] == "") {
                       <h3 class="title-table"> Daftar Transaksi </h3>
                     </div>
                     <div class="col-5">
-
                     </div>
-                    <div class="col-3 list-button">
+                    <div class="col-2">
+                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah Data Transaksi</button>
+                    </div>
+                    <div class="col-1 list-button">
                       <button class="btn btn-primary btn-sm" style=" float: right;" onclick="ToPDF()"><i class="fa fa-file-pdf"></i> PDF</button>
                       <div id="Tambah" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -164,10 +151,11 @@ if ($_SESSION['role'] == "") {
                   <table class="table tabel-transaksi" id="tabel-data">
                     <thead class="" style="background:#007BFF;color:#fff;">
                       <tr>
+                        <th scope="col">No</th>
                         <th scope="col">ID Transaksi</th>
                         <th scope="col">Kasir</th>
                         <th scope="col">Tanggal</th>
-                        <th scope="col">Total Harga</th>
+                        <th scope="col">Total Belanja</th>
                         <th scope="col">
                           <center>Aksi</center>
                         </th>
@@ -176,7 +164,8 @@ if ($_SESSION['role'] == "") {
                     <tbody>
                       <?php
                       include '../Auth/koneksi.php';
-                      $transaksi = mysqli_query($koneksi, "select * from transaksi");
+                      $transaksi = mysqli_query($koneksi, "select * from transaksi order by tanggal DESC");
+                      $i = 1;
                       while ($row = mysqli_fetch_array($transaksi)) {
                         $nama_kasir = '';
                         $kasir = mysqli_query($koneksi, "select nama from user where id_user = '" . $row['id_user'] . "'");
@@ -184,6 +173,7 @@ if ($_SESSION['role'] == "") {
                           $nama_kasir = $row2['nama'];
                         }
                         echo "<tr class='itemTransaksi" . $row['id_transaksi'] . "'>
+                                <td>" . $i . "</td>
                                 <td>" . $row['id_transaksi'] . "</td>
                                 <td>" . $nama_kasir . "</td>
                                 <td>" . $row['tanggal'] . "</td>
@@ -195,6 +185,7 @@ if ($_SESSION['role'] == "") {
                                   </center>
                                 </td>
                               </tr>";
+                        $i++;
                       }
                       ?>
                     </tbody>
@@ -216,12 +207,7 @@ if ($_SESSION['role'] == "") {
                         <?php
                         include '../Auth/koneksi.php';
                         $transaksi = mysqli_query($koneksi, "select * from transaksi");
-                        function rupiah($angka)
-                        {
-
-                          $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
-                          return $hasil_rupiah;
-                        }
+                        
                         while ($row = mysqli_fetch_array($transaksi)) {
                           $id_transaksi = $row['id_transaksi'];
                           $nama_kasir = '';
@@ -247,9 +233,6 @@ if ($_SESSION['role'] == "") {
                       </tbody>
                     </table>
                   </div>
-                  <a href="#" class="float" data-toggle="modal" data-target="#Tambah" aria-hidden="true">
-                    <i class="fa fa-plus my-float"></i>
-                  </a>
                   <div id="list-transaksi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -309,22 +292,30 @@ if ($_SESSION['role'] == "") {
       buttonsStyling: false
     })
 
-    // DROPDOWN BARANG
+    $(document).ready(function(){
+        role= "<?php echo $_SESSION['role']?>";
+        if (role == 'kasir') {
+          $('#link_dashboard').hide();
+          $('#link_user').hide();
+          $('#link_barang').hide();
+          $('#link_transaksi').hide();
+        }
+    });
 
+    // DOCUMENT READY
     $(document).ready(function() {
-      $('#tabel-data').DataTable();
+      let role= "<?php echo $_SESSION['role']?>";
+      if (role == 'kasir') {
+        $('#link_dashboard').hide();
+        $('#link_user').hide();
+        $('#link_barang').hide();
+      }
+      $('#tabel-data').DataTable({"pageLength": 4});
       $('#barangs').select2({
         placeholder: 'Pilih Barang',
         allowClear: true
       });
       kasir = $('#kasir').val();
-
-      var role = "<?php echo $_SESSION['role'] ?>";
-      console.log(role);
-      if (role == 'kasir') {
-        $('#link_user').hide();
-        $('#link_barang').hide();
-      }
     });
 
     // Simpan transaksi
@@ -465,13 +456,13 @@ if ($_SESSION['role'] == "") {
           let htmlList = '';
           list_transaksi.forEach((li, index) => {
             htmlList +=
-              `
+            `
             <tr>
             <td>${index+1}</td>
             <td>${li.barang}</td>
-            <td>${li.harga}</td>
+            <td>Rp${new Intl.NumberFormat('id').format(li.harga)}</td>
             <td>${li.qty}</td>
-            <td>${li.total}</td>
+            <td>Rp${new Intl.NumberFormat('id').format(li.total)}</td>
             </tr>
             `
           })
