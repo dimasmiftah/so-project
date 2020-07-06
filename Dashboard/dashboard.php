@@ -55,7 +55,7 @@ if ($_SESSION['role'] == "") {
           <a class="nav-link active sidebar" href="#" role="tab" aria-selected="true" id="link_dashboard"> <i class="fas fa-th-large"></i> Dashboard</a>
           <a class="nav-link sidebar" href="barang.php" role="tab" aria-selected="false" id="link_barang"> <i class="fas fa-box-open"></i> Barang</a>
           <a class="nav-link sidebar" href="pengguna.php" role="tab" aria-selected="false" id="link_user"><i class="fas fa-users"></i> Pengguna</a>'
-          <a class="nav-link sidebar" href="transaksi.php" role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> Transaksi</a>
+          <a class="nav-link sidebar" href="transaksi.php" role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> List Transaksi</a>
         </div>
       </div>
       <div class="col-9">
