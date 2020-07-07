@@ -114,7 +114,7 @@
                     <tbody>
                       <?php
                       include '../Auth/koneksi.php';
-                      $barang = mysqli_query($koneksi, "select * from barang");
+                      $barang = mysqli_query($koneksi, "select * from barang order by stok");
                       $i = 1;
                       function rupiah($angka)
                       {
