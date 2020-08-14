@@ -1,9 +1,9 @@
 <!doctype html>
 <?php
-  session_start();
-  if ($_SESSION['role'] != "admin") {
-    header("location:../index.php?pesan=admin");
-  }
+session_start();
+if ($_SESSION['role'] != "admin") {
+  header("location:../index.php?pesan=admin");
+}
 ?>
 <html lang="en">
 
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-6"></div>
                     <div class="col-2">
-                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah Data Barang</button>
+                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah" aria-hidden="true" type="button"> Tambah Data Barang</button>
                     </div>
                     <div class="col-3">
                       <div id="Tambah" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -196,7 +196,9 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
   <script>
     $(document).ready(() => {
-      $('#tabel-data').DataTable({"pageLength": 5})
+      $('#tabel-data').DataTable({
+        "pageLength": 5
+      })
     });
 
     function Delete_User(id) {

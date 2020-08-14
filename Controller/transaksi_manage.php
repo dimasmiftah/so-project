@@ -51,4 +51,3 @@ else if ($type == 'detail') {
 	}
 	echo json_encode($list_transaksi);
 }
-?>

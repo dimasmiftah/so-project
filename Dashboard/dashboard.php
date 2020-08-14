@@ -19,7 +19,7 @@ if ($_SESSION['role'] == "") {
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <title>So-ping!</title>
   <style>
-    a.wrapper-card-dashbord.kotak-item{
+    a.wrapper-card-dashbord.kotak-item {
       display: block;
       color: white;
       text-decoration: none;
@@ -76,11 +76,11 @@ if ($_SESSION['role'] == "") {
                           <div class="data-wrapper-card-dashbord">
                             <h4> Barang<br>Stok Tipis </h4>
                             <?php
-                              include '../Auth/koneksi.php';
-                              $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from barang where stok <= 5");
-                              while ($row = mysqli_fetch_array($jumlah)) {
-                                echo "<P> ".$row['jumlah']." Barang</P>";
-                              }
+                            include '../Auth/koneksi.php';
+                            $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from barang where stok <= 5");
+                            while ($row = mysqli_fetch_array($jumlah)) {
+                              echo "<P> " . $row['jumlah'] . " Barang</P>";
+                            }
                             ?>
                           </div>
                         </div>
@@ -99,11 +99,11 @@ if ($_SESSION['role'] == "") {
                           <div class="data-wrapper-card-dashbord">
                             <h4> Jumlah<br>Kasir </h4>
                             <?php
-                              include '../Auth/koneksi.php';
-                              $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from user where role='kasir'");
-                              while ($row = mysqli_fetch_array($jumlah)) {
-                                echo "<P> ".$row['jumlah']." Orang</P>";
-                              }
+                            include '../Auth/koneksi.php';
+                            $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from user where role='kasir'");
+                            while ($row = mysqli_fetch_array($jumlah)) {
+                              echo "<P> " . $row['jumlah'] . " Orang</P>";
+                            }
                             ?>
                           </div>
                         </div>
@@ -122,11 +122,11 @@ if ($_SESSION['role'] == "") {
                           <div class="data-wrapper-card-dashbord">
                             <h4> Transaksi</br>Miggu Ini </h4>
                             <?php
-                              include '../Auth/koneksi.php';
-                              $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from transaksi WHERE YEARWEEK(`tanggal`, 1) = YEARWEEK(CURDATE(), 1)");
-                              while ($row = mysqli_fetch_array($jumlah)) {
-                                echo "<P> ".$row['jumlah']." Transaksi</P>";
-                              }
+                            include '../Auth/koneksi.php';
+                            $jumlah = mysqli_query($koneksi, "select COUNT(*) AS jumlah from transaksi WHERE YEARWEEK(`tanggal`, 1) = YEARWEEK(CURDATE(), 1)");
+                            while ($row = mysqli_fetch_array($jumlah)) {
+                              echo "<P> " . $row['jumlah'] . " Transaksi</P>";
+                            }
                             ?>
                           </div>
                         </div>

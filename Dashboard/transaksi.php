@@ -1,15 +1,16 @@
 <?php
 session_start();
-  // cek apakah yang mengakses halaman ini sudah login
-  if ($_SESSION['role'] == "") {
-    header("location:../index.php?pesan=admin");
-  }
+// cek apakah yang mengakses halaman ini sudah login
+if ($_SESSION['role'] == "") {
+  header("location:../index.php?pesan=admin");
+}
 
-  // fungsi formatting rupiah
-  function rupiah($angka){
-    $hasil_rupiah = "Rp" . number_format($angka, 0, ',', '.');
-    return $hasil_rupiah;
-  }
+// fungsi formatting rupiah
+function rupiah($angka)
+{
+  $hasil_rupiah = "Rp" . number_format($angka, 0, ',', '.');
+  return $hasil_rupiah;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -77,7 +78,7 @@ session_start();
                     <div class="col-5">
                     </div>
                     <div class="col-2">
-                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah Data Transaksi</button>
+                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah" aria-hidden="true" type="button"> Tambah Data Transaksi</button>
                     </div>
                     <div class="col-1 list-button">
                       <button class="btn btn-primary btn-sm" style=" float: right;" onclick="ToPDF()"><i class="fa fa-file-pdf"></i> PDF</button>
@@ -207,7 +208,7 @@ session_start();
                         <?php
                         include '../Auth/koneksi.php';
                         $transaksi = mysqli_query($koneksi, "select * from transaksi");
-                        
+
                         while ($row = mysqli_fetch_array($transaksi)) {
                           $id_transaksi = $row['id_transaksi'];
                           $nama_kasir = '';
@@ -292,25 +293,27 @@ session_start();
       buttonsStyling: false
     })
 
-    $(document).ready(function(){
-        role= "<?php echo $_SESSION['role']?>";
-        if (role == 'kasir') {
-          $('#link_dashboard').hide();
-          $('#link_user').hide();
-          $('#link_barang').hide();
-          $('#link_transaksi').hide();
-        }
+    $(document).ready(function() {
+      role = "<?php echo $_SESSION['role'] ?>";
+      if (role == 'kasir') {
+        $('#link_dashboard').hide();
+        $('#link_user').hide();
+        $('#link_barang').hide();
+        $('#link_transaksi').hide();
+      }
     });
 
     // DOCUMENT READY
     $(document).ready(function() {
-      let role= "<?php echo $_SESSION['role']?>";
+      let role = "<?php echo $_SESSION['role'] ?>";
       if (role == 'kasir') {
         $('#link_dashboard').hide();
         $('#link_user').hide();
         $('#link_barang').hide();
       }
-      $('#tabel-data').DataTable({"pageLength": 4});
+      $('#tabel-data').DataTable({
+        "pageLength": 4
+      });
       $('#barangs').select2({
         placeholder: 'Pilih Barang',
         allowClear: true
@@ -399,7 +402,7 @@ session_start();
             }
             console.log(barang);
             if (jumlah > barang.stok) {
-              alert(barang.barang + ' hanya tersisa ' + barang.stok)
+              alert(barang.barang + ' hanya tersisa ' + barasng.stok)
             } else {
               total += (jumlah * barang.harga);
               list.push({
@@ -456,7 +459,7 @@ session_start();
           let htmlList = '';
           list_transaksi.forEach((li, index) => {
             htmlList +=
-            `
+              `
             <tr>
             <td>${index+1}</td>
             <td>${li.barang}</td>

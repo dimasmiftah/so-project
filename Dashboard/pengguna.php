@@ -63,7 +63,7 @@ if ($_SESSION['role'] != "admin") {
                     <div class="col-3">
                     </div>
                     <div class="col-2">
-                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah"aria-hidden="true" type="button"> Tambah Pengguna</button>
+                      <button class="btn btn-primary btn-tambah" data-toggle="modal" data-target="#Tambah" aria-hidden="true" type="button"> Tambah Pengguna</button>
                     </div>
                     <div class="col-3 list-button">
                       <div id="Tambah" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -196,12 +196,13 @@ if ($_SESSION['role'] != "admin") {
   <script>
     $(document).ready(function() {
       var nama, username, password;
-      var codeListTable = $('#tabel-data').DataTable({"pageLength": 4});
+      var codeListTable = $('#tabel-data').DataTable({
+        "pageLength": 4
+      });
       $('.msg_done').hide();
       $('.msg_error').hide();
       new $.fn.dataTable.Buttons(codeListTable, {
-        buttons: [
-          {
+        buttons: [{
             extend: 'csv',
             text: '<i class="fa fa-file"></i> CSV',
             titleAttr: 'CSV',
